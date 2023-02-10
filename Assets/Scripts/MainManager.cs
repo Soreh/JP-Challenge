@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
+    public Camera OsCam;
+    public Camera ArcadeCam;
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
@@ -22,6 +24,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetMainCam();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -53,13 +56,6 @@ public class MainManager : MonoBehaviour
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
             }
         }
-        else if (m_GameOver)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-        }
     }
 
     void AddPoint(int point)
@@ -72,5 +68,23 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+
+    private void SetMainCam()
+    {
+        if (GameManager.Instance != null) 
+        {
+            switch (GameManager.Instance.Style)
+            {
+                case GameStyle.OldSchool :
+                    OsCam.gameObject.SetActive(true);
+                    ArcadeCam.gameObject.SetActive(false);
+                    break;
+                case GameStyle.Vintage :
+                    OsCam.gameObject.SetActive(false);
+                    ArcadeCam.gameObject.SetActive(true);
+                    break;
+            }
+        }
     }
 }
