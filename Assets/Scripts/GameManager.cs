@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
         string scores = "";
         foreach (Score score in ScoresList)
         {
-            scores += score.name + " : " + score.score;
+            scores += score.name + " : " + score.score + "<br>";
         }
         return scores;
     }

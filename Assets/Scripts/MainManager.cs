@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
+    public static MainManager Instance;
     public Camera OsCam;
     public Camera ArcadeCam;
     public Brick BrickPrefab;
@@ -14,6 +15,7 @@ public class MainManager : MonoBehaviour
 
     public Text ScoreText;
     public GameObject GameOverText;
+    public GameObject NameInputPanel;
     
     private bool m_Started = false;
     private int m_Points;
@@ -41,6 +43,13 @@ public class MainManager : MonoBehaviour
         }
     }
 
+    private void Awake() {
+        if (Instance != null) {
+            return;
+        }
+        Instance = this;
+    }
+
     private void Update()
     {
         if (!m_Started)
@@ -64,10 +73,18 @@ public class MainManager : MonoBehaviour
         ScoreText.text = $"Score : {m_Points}";
     }
 
+    public int GetPoints()
+    {
+        return m_Points;
+    }
+
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (m_Points > 0) {
+            NameInputPanel.SetActive(true);
+        }
     }
 
     private void SetMainCam()
