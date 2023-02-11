@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(1000)]
 public class UIMainHandler : MonoBehaviour
 {
     public GameObject InputNamePanel;
