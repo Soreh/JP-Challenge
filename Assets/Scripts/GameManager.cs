@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public enum GameStyle
 {
@@ -13,9 +17,11 @@ public class GameManager : MonoBehaviour
     public GameStyle Style;
     public List<Score> ScoresList;
     public static GameManager Instance;
+    private int _scoreToSave = 3;
+    private string _scoresSavePath;
 
     private void Start() {
-        ScoresList = GetScoreList();
+
     }
 
     private void Awake() {
@@ -25,6 +31,9 @@ public class GameManager : MonoBehaviour
             return;
         } else {
             Instance = this;
+            _scoresSavePath = Application.persistentDataPath + "/savedscores.json";
+            ScoresList = new List<Score>();
+            GetSavedScores();
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -34,66 +43,119 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    public void SaveScores()
+    private void SaveScores()
     {
-        // TODO
+        SavedScores save = new SavedScores();
+        save.scores = new Score[ScoresList.Count];
+        for (int i = 0; i < ScoresList.Count; i++)
+        {
+            save.scores[i] = ScoresList[i];
+        }
+        string json = JsonUtility.ToJson(save);
+        File.WriteAllText(_scoresSavePath, json );
+        Debug.Log(json + " saved to : " + _scoresSavePath);
     }
 
-    public Score[] GetSavedScores()
+    public void GetSavedScores()
     {
-        Score mockup1 = new Score();
-        mockup1.name = "Test_name";
-        mockup1.score = 50;
-        Score mockup2 = new Score();
-        mockup2.name = "Test_name_2";
-        mockup2.score = 30;
-        Score mockup3 = new Score();
-        mockup3.name = "Test_name_3";
-        mockup3.score = 20;
-
-        Score[] scores = new Score[3];
-        scores[0] = mockup1;
-        scores[1] = mockup2;
-        scores[2] = mockup3;
-
-        return scores;
+        if (File.Exists(_scoresSavePath))
+        {
+            string json = File.ReadAllText(_scoresSavePath);
+            SavedScores save = JsonUtility.FromJson<SavedScores>(json);
+            Debug.Log("Scores retrieved at " + _scoresSavePath);
+            foreach (Score score in save.scores)
+            {
+                ScoresList.Add(score);
+            }
+        }
     }
 
     public string PrintScore()
     {
-        string scores = "";
-        foreach (Score score in ScoresList)
-        {
-            scores += score.name + " : " + score.score + "<br>";
-        }
+        string scores = _scoreToSave + " Highest Scores :<br>";
+        if (ScoresList.Count > 0) {
+            foreach (Score score in ScoresList)
+            {
+                scores += "- " + score.name + " / " + score.score + "<br>";
+            }
+            if (ScoresList.Count < _scoreToSave) 
+            {
+                int emptyLinesToPrint = _scoreToSave - ScoresList.Count;
+                for (int i = 0; i < emptyLinesToPrint; i++)
+                {
+                    scores += "- " + "No one yet..." + "<br>";
+                }
+            }
+        } else {
+            scores += "None yet...";
+        } 
         return scores;
     }
 
+    [System.Serializable]
     public class SavedScores
     {
         public Score[] scores;
     }
 
+    [System.Serializable]
     public class Score
     {
         public string name;
         public int score;
     }
 
-    public void AddNewScore(Score scoreToAdd)
+    public void AddNewScore(string name, int score)
     {
-
+        Score scoreToAdd = new Score();
+        scoreToAdd.name = name;
+        scoreToAdd.score = score;
+        ScoresList.Add(scoreToAdd);
     }
 
-    public List<Score> GetScoreList()
+    ///<summary>
+    ///Check if a score deserves to enter the pantheon and return the rank,
+    ///returns 0 otherwise.
+    ///</summary>
+    public int GetScoreRank(int score)
     {
-        List<Score> sortedScoreList = new List<Score>();
-        Score[] scores = GetSavedScores();
-        foreach (Score score in scores)
+        int rank = 0;
+        if (ScoresList.Count < _scoreToSave) 
         {
-            sortedScoreList.Add(score);
+            if (ScoresList.Count == 0) {
+                rank = 1;
+            } else {
+                for (int i = ScoresList.Count - 1; i >= 0 ; i--)
+                {
+                    Debug.Log(ScoresList.Count);
+                    Debug.Log(i);
+                    if (score > ScoresList[i].score)
+                    {
+                        rank = i + 1;
+                    } else {
+                        rank = ScoresList.Count;
+                    }
+                }
+            }
+        } else {
+            for (int i = ScoresList.Count - 1; i >= 0 ; i--)
+            {
+                if (score > ScoresList[i].score)
+                {
+                    rank = i + 1;
+                }
+            }
         }
-        // TODO : sort the List
-        return sortedScoreList;
+        return rank;
+    }
+
+    public void QuitGame()
+    {
+        SaveScores();
+        #if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+        #else
+        Application.Quit();
+        #endif
     }
 }

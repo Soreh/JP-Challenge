@@ -16,6 +16,7 @@ public class StartMenuHandler : MonoBehaviour
     void Start()
     {
         StyleSlider.value = GameManager.Instance.Style == GameStyle.OldSchool ? 0 : 1;
+        SetStyle();
     }
 
     // Update is called once per frame
@@ -31,11 +32,7 @@ public class StartMenuHandler : MonoBehaviour
 
     public void Exit()
     {
-        #if UNITY_EDITOR
-        EditorApplication.ExitPlaymode();
-        #else
-        Application.Quit();
-        #endif
+        GameManager.Instance.QuitGame();
     }
 
     public void SetStyle()

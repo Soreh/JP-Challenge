@@ -13,9 +13,8 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
-    public Text ScoreText;
-    public GameObject GameOverText;
-    public GameObject NameInputPanel;
+
+    public UIMainHandler UImain;
     
     private bool m_Started = false;
     private int m_Points;
@@ -49,6 +48,7 @@ public class MainManager : MonoBehaviour
             return;
         }
         Instance = this;
+        UImain.UpdateScoresText();
     }
 
     private void Update()
@@ -71,7 +71,7 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        UImain.UpdateScore(m_Points);
     }
 
     public int GetPoints()
@@ -79,12 +79,19 @@ public class MainManager : MonoBehaviour
         return m_Points;
     }
 
+    public void AddScoreToList(string name)
+    {
+        GameManager.Instance.AddNewScore(name, m_Points);
+        UImain.UpdateScoresText();
+    }
+
     public void GameOver()
     {
         m_GameOver = true;
-        GameOverText.SetActive(true);
-        if (m_Points > 0) {
-            NameInputPanel.SetActive(true);
+        UImain.ShowGameOverPanel();
+        int rank = GameManager.Instance.GetScoreRank(m_Points);
+        if (rank> 0) {
+            UImain.ShowHighestScorePanel(rank);
         }
     }
 
