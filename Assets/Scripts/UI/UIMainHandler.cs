@@ -5,33 +5,17 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
+
+///<summary>The class responsible to handle the main scene menu</summary>
 [DefaultExecutionOrder(1000)]
 public class UIMainHandler : MonoBehaviour
 {
-    public GameObject InputNamePanel;
-    private MainManager MainMngr;
-
     public TMP_InputField NameField;
     public Button SaveScoreButton;
     public GameObject HighestScorePanel;
     public GameObject GameOverPanel;
     public Text ScoreText;
     public TextMeshProUGUI BestScoresTxt;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    private void Awake() {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void RestartGame()
     {
@@ -43,16 +27,16 @@ public class UIMainHandler : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void DismissInputName()
+    public void DismissHighestScorePanel()
     {
-        InputNamePanel.SetActive(false);
+        HighestScorePanel.SetActive(false);
     }
 
     public void SaveScore()
     {
         string name = NameField.text;
         MainManager.Instance.AddScoreToList(name);
-        DismissInputName();
+        DismissHighestScorePanel();
     }
 
     public void SetSaveButton()
@@ -90,7 +74,7 @@ public class UIMainHandler : MonoBehaviour
 
     public void UpdateScore(int score)
     {
-        ScoreText.text = $"Score : {score}"; // Interesting notation
+        ScoreText.text = $"Score : {score}"; // Interesting notation, alowing a formated string
     }
 
     public void UpdateScoresText()
@@ -106,3 +90,4 @@ public class UIMainHandler : MonoBehaviour
     }
 
 }
+    

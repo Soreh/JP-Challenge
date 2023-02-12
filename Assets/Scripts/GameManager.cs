@@ -7,11 +7,18 @@ using System.IO;
 using UnityEditor;
 #endif
 
+///<summary>Used to define the Game Style</summary>
 public enum GameStyle
 {
     OldSchool,
     Vintage
 }
+
+///<summary>
+///The main manager for the game, responsible for settong the style, 
+///saving data, persist settings between scenes, load and quit the game,
+///and manage the score system.
+///</summary>
 public class GameManager : MonoBehaviour
 {
     public GameStyle Style;
@@ -19,10 +26,6 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     private int _scoreToSave = 3;
     private string _scoresSavePath;
-
-    private void Start() {
-
-    }
 
     private void Awake() {
         if (Instance != null)
@@ -73,6 +76,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    ///<summary>
+    ///Prepare the text for the highest scores panel and return it.
+    ///</summary>
     public string PrintScore()
     {
         string scores = "The " + _scoreToSave + "<br>Highest Scores :<br>";
@@ -95,6 +101,7 @@ public class GameManager : MonoBehaviour
         return scores;
     }
 
+    ///<summary>Inner class responsible to handle saved data</summary>
     [System.Serializable]
     public class SavedData
     {
@@ -102,6 +109,7 @@ public class GameManager : MonoBehaviour
         public GameStyle styleSetting;
     }
 
+    ///<summary>Inner class responsible to handle saved score</summary>
     [System.Serializable]
     public class Score
     {
@@ -109,6 +117,7 @@ public class GameManager : MonoBehaviour
         public int score;
     }
 
+    ///<summary>Add anew score to the scores list</summary>
     public void AddNewScore(string name, int score)
     {
         Score scoreToAdd = new Score();
@@ -145,6 +154,9 @@ public class GameManager : MonoBehaviour
         return rank;
     }
 
+    ///<summary>
+    ///Sort the scores List in descending order based on the score.
+    ///</summary>
     private void SortScores()
     {
         if (ScoresList.Count > 0)
@@ -153,6 +165,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    ///<summary>
+    ///Quit the game and save.
+    ///(Exit play mode if in editor mode)
+    ///</summary>
     public void QuitGame()
     {
         SaveScoresAndSettings();

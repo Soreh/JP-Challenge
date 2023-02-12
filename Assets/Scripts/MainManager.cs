@@ -14,8 +14,8 @@ public class MainManager : MonoBehaviour
     public Rigidbody Ball;
     public UIMainHandler UImain_OS;
     public UIMainHandler UImain_ARCADE;
-    private UIMainHandler UImain;
     
+    private UIMainHandler UImain;
     private bool m_Started = false;
     private int m_Points;
     
@@ -67,6 +67,9 @@ public class MainManager : MonoBehaviour
         }
     }
 
+    ///<summary>
+    ///Add points and pass the upadte to the UI
+    ///</summary>
     void AddPoint(int point)
     {
         m_Points += point;
@@ -78,12 +81,18 @@ public class MainManager : MonoBehaviour
         return m_Points;
     }
 
+    ///<summary>
+    ///Add a new high score in the Scores List
+    ///</summary>
     public void AddScoreToList(string name)
     {
         GameManager.Instance.AddNewScore(name, m_Points);
         UImain.UpdateScoresText();
     }
 
+    ///<summary>
+    ///Display Game Over panel and the new higest score panel if needeed
+    ///</summary>
     public void GameOver()
     {
         UImain.ShowGameOverPanel();

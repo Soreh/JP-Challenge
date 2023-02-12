@@ -4,24 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+[DefaultExecutionOrder(1000)]
 public class BestScores : MonoBehaviour
 {
     public TextMeshProUGUI BestScoresTxt;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
     private void Awake() {
         SetScoresText();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    ///<summary>Set the highest scores text</summary>
     void SetScoresText()
     {
         if (GameManager.Instance != null)

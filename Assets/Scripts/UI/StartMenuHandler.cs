@@ -7,21 +7,21 @@ using UnityEngine.UI;
 using UnityEditor;
 #endif
 
+  
+///<summary>
+///The class responsible to handle the StartMenu UI
+///</summary>
+[DefaultExecutionOrder(1000)]
 public class StartMenuHandler : MonoBehaviour
 {
     public GameObject OS_panel;
     public GameObject ARC_panel;
     public Slider StyleSlider;
+    
     // Start is called before the first frame update
     void Start()
     {
         StyleSlider.value = GameManager.Instance.Style == GameStyle.OldSchool ? 0 : 1;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void StartGame()
@@ -61,3 +61,4 @@ public class StartMenuHandler : MonoBehaviour
     }
 
 }
+

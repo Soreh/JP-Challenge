@@ -2397,7 +2397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74961722ae81b4e4cb38e1502ac3238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  style: 0
+  style: 1
   forceHidingAtStart: 1
 --- !u!1 &839843234
 GameObject:
@@ -2717,10 +2717,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 909556779}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03ba22b9eed43467db812b0ad050d834, type: 3}
+  m_Script: {fileID: 11500000, guid: 215ccebcf988f483997620090ca2451d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputNamePanel: {fileID: 1224714175}
   NameField: {fileID: 16256386}
   SaveScoreButton: {fileID: 79360900}
   HighestScorePanel: {fileID: 1224714175}
@@ -3642,7 +3641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74961722ae81b4e4cb38e1502ac3238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  style: 0
+  style: 1
   forceHidingAtStart: 1
 --- !u!1 &1277378506
 GameObject:
@@ -4128,7 +4127,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2137539499}
         m_TargetAssemblyTypeName: UIMainHandler, Assembly-CSharp
-        m_MethodName: DismissInputName
+        m_MethodName: DismissHighestScorePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6105,7 +6104,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 909556780}
         m_TargetAssemblyTypeName: UIMainHandler, Assembly-CSharp
-        m_MethodName: DismissInputName
+        m_MethodName: DismissHighestScorePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6268,10 +6267,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2137539494}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03ba22b9eed43467db812b0ad050d834, type: 3}
+  m_Script: {fileID: 11500000, guid: 215ccebcf988f483997620090ca2451d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputNamePanel: {fileID: 839843234}
   NameField: {fileID: 2103399051}
   SaveScoreButton: {fileID: 502659431}
   HighestScorePanel: {fileID: 839843234}
