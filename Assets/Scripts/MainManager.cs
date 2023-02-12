@@ -12,20 +12,18 @@ public class MainManager : MonoBehaviour
     public Brick BrickPrefab;
     public int LineCount = 6;
     public Rigidbody Ball;
-
-
-    public UIMainHandler UImain;
+    public UIMainHandler UImain_OS;
+    public UIMainHandler UImain_ARCADE;
+    private UIMainHandler UImain;
     
     private bool m_Started = false;
     private int m_Points;
     
-    private bool m_GameOver = false;
 
     
     // Start is called before the first frame update
     void Start()
     {
-        SetMainCam();
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -48,6 +46,7 @@ public class MainManager : MonoBehaviour
             return;
         }
         Instance = this;
+        SetStyle();
         UImain.UpdateScoresText();
     }
 
@@ -87,7 +86,6 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-        m_GameOver = true;
         UImain.ShowGameOverPanel();
         int rank = GameManager.Instance.GetScoreRank(m_Points);
         if (rank> 0) {
@@ -95,7 +93,11 @@ public class MainManager : MonoBehaviour
         }
     }
 
-    private void SetMainCam()
+    ///<summary>
+    ///Set the style of the UI.
+    ///If the game Manager is not loaded, it activates the default Old Style UI style
+    ///</summary>
+    private void SetStyle()
     {
         if (GameManager.Instance != null) 
         {
@@ -104,12 +106,19 @@ public class MainManager : MonoBehaviour
                 case GameStyle.OldSchool :
                     OsCam.gameObject.SetActive(true);
                     ArcadeCam.gameObject.SetActive(false);
+                    UImain = UImain_OS;
                     break;
                 case GameStyle.Vintage :
                     OsCam.gameObject.SetActive(false);
                     ArcadeCam.gameObject.SetActive(true);
+                    UImain = UImain_ARCADE;
                     break;
             }
+        } else {
+            OsCam.gameObject.SetActive(true);
+            ArcadeCam.gameObject.SetActive(false);
+            UImain_OS.gameObject.SetActive(true);
+            UImain = UImain_OS;
         }
     }
 }

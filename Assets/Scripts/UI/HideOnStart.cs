@@ -2,20 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(1000)]
 public class HideOnStart : MonoBehaviour
 {
     public GameStyle style;
     [SerializeField] bool forceHidingAtStart = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        if (gameObject.active)
+        if (gameObject.activeInHierarchy)
         {
             if (forceHidingAtStart) 
             {
+                Debug.Log(gameObject.name + " forced to hide");
                 gameObject.SetActive(false);
-            } else if (GameManager.Instance == null ) {
-                gameObject.SetActive(GameManager.Instance.Style == style ? true : false);
+            } else if (GameManager.Instance != null ) {
+                if(style == GameManager.Instance.Style) {
+                    Debug.Log(GameManager.Instance.Style + " = " + style);
+                    gameObject.SetActive(true);
+                    Debug.Log(gameObject.name + " activated");
+                } else {
+                    gameObject.SetActive(false);
+                    Debug.Log(gameObject.name + " deactivated");
+                }
             }
         }
     }

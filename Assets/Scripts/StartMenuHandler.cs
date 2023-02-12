@@ -16,7 +16,6 @@ public class StartMenuHandler : MonoBehaviour
     void Start()
     {
         StyleSlider.value = GameManager.Instance.Style == GameStyle.OldSchool ? 0 : 1;
-        SetStyle();
     }
 
     // Update is called once per frame
