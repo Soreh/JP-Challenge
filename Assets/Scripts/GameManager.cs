@@ -31,9 +31,9 @@ public class GameManager : MonoBehaviour
             return;
         } else {
             Instance = this;
-            _scoresSavePath = Application.persistentDataPath + "/savedscores.json";
+            _scoresSavePath = Application.persistentDataPath + "/saved_data.json";
             ScoresList = new List<Score>();
-            GetSavedScores();
+            GetSavedData();
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -43,31 +43,33 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
-    private void SaveScores()
+    private void SaveScoresAndSettings()
     {
-        SavedScores save = new SavedScores();
+        SavedData save = new SavedData();
         save.scores = new Score[ScoresList.Count];
         for (int i = 0; i < ScoresList.Count; i++)
         {
             save.scores[i] = ScoresList[i];
         }
+        save.styleSetting = Style;
         string json = JsonUtility.ToJson(save);
         File.WriteAllText(_scoresSavePath, json );
         Debug.Log(json + " saved to : " + _scoresSavePath);
     }
 
-    public void GetSavedScores()
+    public void GetSavedData()
     {
         if (File.Exists(_scoresSavePath))
         {
             string json = File.ReadAllText(_scoresSavePath);
-            SavedScores save = JsonUtility.FromJson<SavedScores>(json);
+            SavedData save = JsonUtility.FromJson<SavedData>(json);
             Debug.Log("Scores retrieved at " + _scoresSavePath);
             foreach (Score score in save.scores)
             {
                 ScoresList.Add(score);
             }
             SortScores();
+            Style = save.styleSetting;
         }
     }
 
@@ -94,9 +96,10 @@ public class GameManager : MonoBehaviour
     }
 
     [System.Serializable]
-    public class SavedScores
+    public class SavedData
     {
         public Score[] scores;
+        public GameStyle styleSetting;
     }
 
     [System.Serializable]
@@ -152,7 +155,7 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        SaveScores();
+        SaveScoresAndSettings();
         #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
         #else
