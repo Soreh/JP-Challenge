@@ -67,12 +67,13 @@ public class GameManager : MonoBehaviour
             {
                 ScoresList.Add(score);
             }
+            SortScores();
         }
     }
 
     public string PrintScore()
     {
-        string scores = _scoreToSave + " Highest Scores :<br>";
+        string scores = "The " + _scoreToSave + "<br>Highest Scores :<br>";
         if (ScoresList.Count > 0) {
             foreach (Score score in ScoresList)
             {
@@ -111,6 +112,11 @@ public class GameManager : MonoBehaviour
         scoreToAdd.name = name;
         scoreToAdd.score = score;
         ScoresList.Add(scoreToAdd);
+        SortScores();
+        if (ScoresList.Count > _scoreToSave)
+        {
+            ScoresList.RemoveAt(ScoresList.Count - 1);
+        }
     }
 
     ///<summary>
@@ -120,33 +126,28 @@ public class GameManager : MonoBehaviour
     public int GetScoreRank(int score)
     {
         int rank = 0;
-        if (ScoresList.Count < _scoreToSave) 
+        bool rankOverride = false;
+        for (int i = 0; i < ScoresList.Count; i++)
         {
-            if (ScoresList.Count == 0) {
-                rank = 1;
-            } else {
-                for (int i = ScoresList.Count - 1; i >= 0 ; i--)
-                {
-                    Debug.Log(ScoresList.Count);
-                    Debug.Log(i);
-                    if (score > ScoresList[i].score)
-                    {
-                        rank = i + 1;
-                    } else {
-                        rank = ScoresList.Count;
-                    }
-                }
-            }
-        } else {
-            for (int i = ScoresList.Count - 1; i >= 0 ; i--)
+            if (score > ScoresList[i].score)
             {
-                if (score > ScoresList[i].score)
-                {
-                    rank = i + 1;
-                }
+                rank = i + 1;
+                rankOverride = true;
+                break;
             }
         }
+        if (!rankOverride && ScoresList.Count < _scoreToSave) {
+            rank = ScoresList.Count + 1;
+        }
         return rank;
+    }
+
+    private void SortScores()
+    {
+        if (ScoresList.Count > 0)
+        {
+            ScoresList.Sort((x, y) => y.score.CompareTo(x.score));
+        }
     }
 
     public void QuitGame()
