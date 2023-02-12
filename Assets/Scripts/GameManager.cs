@@ -66,7 +66,6 @@ public class GameManager : MonoBehaviour
         {
             string json = File.ReadAllText(_scoresSavePath);
             SavedData save = JsonUtility.FromJson<SavedData>(json);
-            Debug.Log("Scores retrieved at " + _scoresSavePath);
             foreach (Score score in save.scores)
             {
                 ScoresList.Add(score);
